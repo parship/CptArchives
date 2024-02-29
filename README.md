@@ -4,6 +4,11 @@
 
 ---
 
+## UNMAINTAINED
+**Note:** This version of the plugin is not maintained anymore.
+
+---
+
 ## Features
 
 - Post-like editing experience for post type archives with support for title, content, excerpt, custom fields, 
