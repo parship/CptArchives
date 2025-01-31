@@ -1,5 +1,5 @@
 {
-    "name": "inpsyde/cpt-archives",
+    "name": "parshipgroup/cpt-archives",
     "description": "Allows a post-like editing experience for post type archives.",
     "type": "library",
     "license": "GPL-2.0-or-later",
