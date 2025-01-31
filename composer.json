@@ -1,6 +1,7 @@
 {
     "name": "parshipgroup/cpt-archives",
     "description": "Allows a post-like editing experience for post type archives.",
+    "version": "0.1.2",
     "type": "library",
     "license": "GPL-2.0-or-later",
     "authors": [
