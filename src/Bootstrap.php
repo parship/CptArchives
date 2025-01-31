@@ -10,6 +10,9 @@
 
 namespace CptArchives;
 
+use WP_Admin_Bar;
+use WP_Screen;
+
 /**
  * @package CptArchives
  */
@@ -18,7 +21,7 @@ class Bootstrap {
 	/**
 	 * @var bool
 	 */
-	private static $done = FALSE;
+	private static bool $done = false;
 
 	/**
 	 * Launch all the  bootstrap tasks, according to current application "side".
@@ -30,16 +33,16 @@ class Bootstrap {
 	public static function bootstrap() {
 
 		if ( self::$done ) {
-			return FALSE;
+			return false;
 		}
 
-		self::$done = TRUE;
+		self::$done = true;
 		$instance   = new static();
 
 		$instance->core();
 		is_admin() ? $instance->backend() : $instance->frontend();
 
-		return TRUE;
+		return true;
 	}
 
 	/**
@@ -65,7 +68,7 @@ class Bootstrap {
 
 		add_action( 'admin_menu', [ new AdminUi(), 'setup' ] );
 
-		add_action( 'current_screen', function ( \WP_Screen $screen ) {
+		add_action( 'current_screen', function ( WP_Screen $screen ) {
 			if ( AdminUi::is_archive_ui_screen() ) {
 				$screen->post_type = ArchiveType::SLUG;
 			}
@@ -94,7 +97,7 @@ class Bootstrap {
 					} );
 				}
 
-				return $title ? : $value;
+				return $title ?: $value;
 			}
 		);
 
@@ -102,11 +105,11 @@ class Bootstrap {
 			'get_the_archive_description',
 			function ( $value ) {
 
-				return archive_excerpt() ? : $value;
+				return archive_excerpt() ?: $value;
 			}
 		);
 
-		add_action( 'admin_bar_menu', function ( \WP_Admin_Bar $wp_admin_bar ) {
+		add_action( 'admin_bar_menu', function ( WP_Admin_Bar $wp_admin_bar ) {
 			if ( ! is_post_type_archive() ) {
 				return;
 			}

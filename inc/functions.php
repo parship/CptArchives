@@ -18,8 +18,8 @@ const LOADED = 1;
 
 /**
  * @param string|\WP_Post_Type|NULL $post_type
- * @param string                    $before
- * @param string                    $after
+ * @param string $before
+ * @param string $after
  *
  * @return string
  */
@@ -32,7 +32,7 @@ function archive_title( $post_type = null, string $before = '', string $after = 
 /**
  * @param string|\WP_Post_Type|NULL $post_type
  * @param string|null $more_link_text
- * @param bool        $strip_teaser
+ * @param bool $strip_teaser
  *
  * @return string
  */
@@ -81,8 +81,8 @@ function archive_thumbnail_id( $post_type = null ): int {
 
 /**
  * @param string|\WP_Post_Type|NULL $post_type
- * @param string      $size
- * @param array       $attr
+ * @param string $size
+ * @param array $attr
  *
  * @return string
  */
@@ -95,8 +95,8 @@ function archive_thumbnail( $post_type = null, string $size = 'post-thumbnail', 
 
 /**
  * @param string|\WP_Post_Type|NULL $post_type
- * @param string      $key
- * @param bool        $single
+ * @param string $key
+ * @param bool $single
  *
  * @return mixed
  */

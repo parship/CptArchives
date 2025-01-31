@@ -15,8 +15,8 @@ namespace CptArchives;
  */
 class AdminUi {
 
-	const FILTER_CAPABILITY = 'cpt-archives.can-edit-archive';
-	const MENU_SUFFIX = '-archive-post';
+	const string FILTER_CAPABILITY = 'cpt-archives.can-edit-archive';
+	const string MENU_SUFFIX = '-archive-post';
 
 	/**
 	 * @var \WP_Post_Type|null
@@ -34,7 +34,7 @@ class AdminUi {
 	public static function is_archive_ui_screen(): bool {
 
 		if ( self::$target_post_type ) {
-			return TRUE;
+			return true;
 		}
 
 		$screen  = is_admin() && did_action( 'current_screen' ) ? get_current_screen() : null;
@@ -42,31 +42,31 @@ class AdminUi {
 		$suffix  = preg_quote( self::MENU_SUFFIX, '~' );
 
 		if ( ! preg_match( '~^page_(.+)?' . $suffix . '$~', end( $id_part ), $matches ) ) {
-			return FALSE;
+			return false;
 		}
 
-		$type = $matches[ 1 ];
+		$type = $matches[1];
 		if ( ! post_type_exists( $type ) ) {
-			return FALSE;
+			return false;
 		}
 
 		$type_obj = get_post_type_object( $type );
 		if ( ! $type_obj || ! $type_obj->has_archive ) {
-			return FALSE;
+			return false;
 		}
 
 		$page = filter_input( INPUT_GET, 'page' );
 		if ( ! preg_match( '~^(.+)?' . $suffix . '$~', $page, $matches ) ) {
-			return FALSE;
+			return false;
 		}
 
-		if ( $matches[ 1 ] === $type_obj->name ) {
+		if ( $matches[1] === $type_obj->name ) {
 			self::$target_post_type = $type_obj;
 
-			return TRUE;
+			return true;
 		}
 
-		return FALSE;
+		return false;
 	}
 
 	/**
@@ -77,7 +77,7 @@ class AdminUi {
 	public function setup(): bool {
 
 		if ( ! is_admin() || is_network_admin() || is_user_admin() ) {
-			return FALSE;
+			return false;
 		}
 
 		return
@@ -103,7 +103,7 @@ class AdminUi {
 		$target_post_types = ArchiveType::target_post_types();
 
 		if ( ! $target_post_types ) {
-			return FALSE;
+			return false;
 		}
 
 		$done_count  = 0;
@@ -125,7 +125,7 @@ class AdminUi {
 
 			remove_menu_page( $f_slug );
 
-			return FALSE;
+			return false;
 		}
 
 		$done_count ++;
@@ -148,10 +148,10 @@ class AdminUi {
 	 *
 	 * Use this `render_menu_page()` method as me page callback.
 	 *
-	 * @param string        $parent
-	 * @param string        $slug
-	 * @param string        $title
-	 * @param string        $capability
+	 * @param string $parent
+	 * @param string $slug
+	 * @param string $title
+	 * @param string $capability
 	 * @param \WP_Post_Type $cpt
 	 *
 	 * @return bool
@@ -199,7 +199,7 @@ class AdminUi {
 		}
 
 		/**
-		 * @var string        $capability
+		 * @var string $capability
 		 * @var \WP_Post_Type $target_type_object
 		 */
 		list( $capability, $target_type_object ) = $type_data[ $key ];
@@ -228,19 +228,19 @@ class AdminUi {
 		$post_ID          = $post_id;
 		$action           = 'edit';
 
-		$post_type_object->publicly_queryable = TRUE;
-		$post_type_object->public             = TRUE;
+		$post_type_object->publicly_queryable = true;
+		$post_type_object->public             = true;
 
 		// Change public from false only when needed to show archive link under title
 		add_filter( 'post_updated_messages', function ( $messages ) use ( $post_type_object ) {
-			$post_type_object->publicly_queryable = FALSE;
-			$post_type_object->public             = FALSE;
+			$post_type_object->publicly_queryable = false;
+			$post_type_object->public             = false;
 			add_action( 'edit_form_top', function () use ( $post_type_object ) {
-				$post_type_object->publicly_queryable = TRUE;
-				$post_type_object->public             = TRUE;
+				$post_type_object->publicly_queryable = true;
+				$post_type_object->public             = true;
 				add_action( 'edit_form_after_title', function () use ( $post_type_object ) {
-					$post_type_object->publicly_queryable = FALSE;
-					$post_type_object->public             = FALSE;
+					$post_type_object->publicly_queryable = false;
+					$post_type_object->public             = false;
 				} );
 			} );
 
@@ -286,14 +286,14 @@ class AdminUi {
 			global $wp_meta_boxes;
 
 			$cpt_boxes      = $wp_meta_boxes[ ArchiveType::SLUG ] ?? [];
-			$cpt_boxes_side = $cpt_boxes[ 'side' ] ?? [];
-			unset( $cpt_boxes[ 'side' ], $wp_meta_boxes[ ArchiveType::SLUG ][ 'side' ] );
+			$cpt_boxes_side = $cpt_boxes['side'] ?? [];
+			unset( $cpt_boxes['side'], $wp_meta_boxes[ ArchiveType::SLUG ]['side'] );
 
 			$screen_boxes      = $wp_meta_boxes[ $screen->id ];
-			$screen_boxes_side = $screen_boxes[ 'side' ] ?? [];
-			unset( $screen_boxes[ 'side' ], $wp_meta_boxes[ $screen->id ][ 'side' ] );
+			$screen_boxes_side = $screen_boxes['side'] ?? [];
+			unset( $screen_boxes['side'], $wp_meta_boxes[ $screen->id ]['side'] );
 
-			$wp_meta_boxes[ ArchiveType::SLUG ][ 'side' ] = array_merge_recursive(
+			$wp_meta_boxes[ ArchiveType::SLUG ]['side'] = array_merge_recursive(
 				$cpt_boxes_side,
 				$screen_boxes_side
 			);
@@ -324,7 +324,7 @@ class AdminUi {
 				&& $domain === 'default'
 				&& ( $text === 'Move to Trash' || $text === 'Delete Permanently' )
 			) {
-				$doing       = TRUE;
+				$doing       = true;
 				$translation = esc_html__( 'Reset all the data.', 'cpt-archives' );
 			}
 
@@ -343,7 +343,7 @@ class AdminUi {
 			}
 		}, 0 );
 
-		return TRUE;
+		return true;
 	}
 
 	/**
@@ -361,7 +361,7 @@ class AdminUi {
 			}
 
 			global $post_ID, $post;
-			$permalink      = esc_url( get_permalink( $post_ID ) ? : '' );
+			$permalink      = esc_url( get_permalink( $post_ID ) ?: '' );
 			$preview_url    = esc_url( get_preview_post_link( $post ) );
 			$scheduled_date = date_i18n( __( 'M j, Y @ H:i' ), strtotime( $post->post_date ) );
 
@@ -382,15 +382,15 @@ class AdminUi {
 			$scheduled_link_html = sprintf( $link_format_blank, $permalink, $preview );
 			$view_link_html      = sprintf( $link_format, $permalink, $view );
 
-			$messages[ 'post' ] = [
+			$messages['post'] = [
 				'',
 				$archive_updated . $view_link_html,
 				$cf_updated,
 				$cf_updated,
 				$archive_updated,
-				isset( $_GET[ 'revision' ] )
-					? sprintf( $archive_restored, wp_post_revision_title( (int) $_GET[ 'revision' ], FALSE ) )
-					: FALSE,
+				isset( $_GET['revision'] )
+					? sprintf( $archive_restored, wp_post_revision_title( (int) $_GET['revision'], false ) )
+					: false,
 				$archive_published . $view_link_html,
 				$archive_saved,
 				$archive_submitted . $preview_link_html,
@@ -412,6 +412,6 @@ class AdminUi {
 		echo '<h1>' . esc_html__( 'Something went wrong...', 'cpt-archives' ) . '</h1>';
 		echo '<p>' . esc_html__( 'Sorry, it was not possible to find an archive to edit.', 'cpt-archives' ) . '</p>';
 
-		return FALSE;
+		return false;
 	}
 }

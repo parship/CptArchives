@@ -41,9 +41,9 @@ class ArchiveType {
 
 		$types = get_post_types(
 			[
-				'has_archive'        => TRUE,
-				'publicly_queryable' => TRUE,
-				'_builtin'           => FALSE
+				'has_archive'        => true,
+				'publicly_queryable' => true,
+				'_builtin'           => false
 			],
 			'objects'
 		);
@@ -57,8 +57,8 @@ class ArchiveType {
 					$type instanceof \WP_Post_Type
 					&& $type->has_archive
 					&& $type->publicly_queryable
-					&& $type->_builtin === FALSE
-					&& ! in_array( $type->name, self::CORE_TYPES, TRUE );
+					&& $type->_builtin === false
+					&& ! in_array( $type->name, self::CORE_TYPES, true );
 			}
 		);
 
@@ -75,10 +75,10 @@ class ArchiveType {
 		if ( $this->register_post_type() ) {
 			$this->filter_urls();
 
-			return TRUE;
+			return true;
 		}
 
-		return FALSE;
+		return false;
 	}
 
 	/**
@@ -89,7 +89,7 @@ class ArchiveType {
 	 * @return bool
 	 */
 	private function register_post_type(): bool {
-		
+
 		$args = [
 			'label'  => __( 'CPT Archives', 'cpt-archives' ),
 			'labels' => [
@@ -112,7 +112,7 @@ class ArchiveType {
 			],
 
 			'capability_type'   => 'post',
-			'map_meta_cap'      => TRUE,
+			'map_meta_cap'      => true,
 			'capabilities'      => [ 'create_posts' => 'do_not_allow' ],
 			'supports'          => [
 				'title',
@@ -122,25 +122,25 @@ class ArchiveType {
 				'custom-fields',
 				'revisions',
 			],
-			'show_in_nav_menus' => TRUE,
-			'show_in_rest'      => FALSE,
+			'show_in_nav_menus' => true,
+			'show_in_rest'      => false,
 		];
 
 		$args = (array) apply_filters( self::FILTER_ARGS, $args );
 
 		$forced = [
-			'public'              => FALSE,
-			'hierarchical'        => FALSE,
-			'exclude_from_search' => TRUE,
-			'publicly_queryable'  => FALSE,
-			'show_ui'             => FALSE,
-			'show_in_menu'        => FALSE,
-			'show_in_admin_bar'   => FALSE,
-			'has_archive'         => FALSE,
-			'rewrite'             => FALSE,
-			'query_var'           => FALSE,
+			'public'              => false,
+			'hierarchical'        => false,
+			'exclude_from_search' => true,
+			'publicly_queryable'  => false,
+			'show_ui'             => false,
+			'show_in_menu'        => false,
+			'show_in_admin_bar'   => false,
+			'has_archive'         => false,
+			'rewrite'             => false,
+			'query_var'           => false,
 			'permalink_epmask'    => EP_NONE,
-			'delete_with_user'    => FALSE,
+			'delete_with_user'    => false,
 		];
 
 		$registered = register_post_type( self::SLUG, array_merge( $args, $forced ) );
@@ -161,7 +161,7 @@ class ArchiveType {
 					return;
 				}
 
-				$target_type = get_post_meta( $post_id, Archive::TARGET_TYPE_KEY, TRUE );
+				$target_type = get_post_meta( $post_id, Archive::TARGET_TYPE_KEY, true );
 				if ( ! $target_type || ! post_type_exists( $target_type ) ) {
 					return;
 				}
@@ -186,7 +186,7 @@ class ArchiveType {
 					return $link;
 				}
 
-				$target_type = get_post_meta( $post_id, Archive::TARGET_TYPE_KEY, TRUE );
+				$target_type = get_post_meta( $post_id, Archive::TARGET_TYPE_KEY, true );
 				if ( ! $target_type || ! post_type_exists( $target_type ) ) {
 					return $link;
 				}
@@ -210,13 +210,13 @@ class ArchiveType {
 					return $post_link;
 				}
 
-				$target_type = get_post_meta( $post->ID, Archive::TARGET_TYPE_KEY, TRUE );
+				$target_type = get_post_meta( $post->ID, Archive::TARGET_TYPE_KEY, true );
 
 				if ( ! $target_type ) {
 					return $post_link;
 				}
 
-				return get_post_type_archive_link( $target_type ) ? : home_url();
+				return get_post_type_archive_link( $target_type ) ?: home_url();
 			},
 			99,
 			2
@@ -230,13 +230,13 @@ class ArchiveType {
 					return $preview_link;
 				}
 
-				$target_type = get_post_meta( $post->ID, Archive::TARGET_TYPE_KEY, TRUE );
+				$target_type = get_post_meta( $post->ID, Archive::TARGET_TYPE_KEY, true );
 
 				if ( ! $target_type ) {
 					return $preview_link;
 				}
 
-				return get_post_type_archive_link( $target_type ) ? : home_url();
+				return get_post_type_archive_link( $target_type ) ?: home_url();
 			},
 			99,
 			2
@@ -250,13 +250,13 @@ class ArchiveType {
 					return $permalink;
 				}
 
-				$target_type = get_post_meta( $post->ID, Archive::TARGET_TYPE_KEY, TRUE );
+				$target_type = get_post_meta( $post->ID, Archive::TARGET_TYPE_KEY, true );
 
 				if ( ! $target_type ) {
 					return $permalink;
 				}
 
-				return [ get_post_type_archive_link( $target_type ) ? : home_url(), $target_type ];
+				return [ get_post_type_archive_link( $target_type ) ?: home_url(), $target_type ];
 			},
 			99,
 			5

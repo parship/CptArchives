@@ -59,7 +59,7 @@ class Archive {
 			return new static();
 		}
 
-		$valid_types  = ArchiveType::target_post_types();
+		$valid_types = ArchiveType::target_post_types();
 
 		if ( ! array_key_exists( $type_name, $valid_types ) ) {
 			return new static();
@@ -128,7 +128,7 @@ class Archive {
 	 *
 	 * @param \WP_Post $post
 	 */
-	public function __construct( \WP_Post $post = null ) {
+	public function __construct( ?\WP_Post $post = null ) {
 
 		$this->post = $post;
 	}
@@ -148,7 +148,7 @@ class Archive {
 	 */
 	public function target_type(): string {
 
-		$type = get_post_meta( $this->post->ID, self::TARGET_TYPE_KEY, TRUE );
+		$type = get_post_meta( $this->post->ID, self::TARGET_TYPE_KEY, true );
 		if ( ! $type || ! post_type_exists( $type ) ) {
 			return '';
 		}
@@ -183,11 +183,11 @@ class Archive {
 	 * Returns the content for the archive.
 	 *
 	 * @param string|null $more_link_text
-	 * @param bool        $strip_teaser
+	 * @param bool $strip_teaser
 	 *
 	 * @return string
 	 */
-	public function archive_content( string $more_link_text = null, bool $strip_teaser = FALSE ): string {
+	public function archive_content( ?string $more_link_text = null, bool $strip_teaser = false ): string {
 
 		if ( ! $this->is_valid() ) {
 			return '';
@@ -231,7 +231,7 @@ class Archive {
 
 		return $this->is_valid()
 			? has_post_thumbnail( $this->post )
-			: FALSE;
+			: false;
 	}
 
 	/**
@@ -248,7 +248,7 @@ class Archive {
 	 * Returns the archive thumbnail `img` tag or empty string when no thumbnail.
 	 *
 	 * @param string $size
-	 * @param array  $attr
+	 * @param array $attr
 	 *
 	 * @return string
 	 */
@@ -267,14 +267,14 @@ class Archive {
 	 * Returns a custom field value for the archive.
 	 *
 	 * @param string $key
-	 * @param bool   $single
+	 * @param bool $single
 	 *
 	 * @return mixed
 	 */
-	public function archive_meta( string $key = '', bool $single = FALSE ) {
+	public function archive_meta( string $key = '', bool $single = false ) {
 
 		if ( ! $this->is_valid( [ 'draft', 'publish', 'future', 'pending', 'private' ] ) ) {
-			return $single && $key ? FALSE : [];
+			return $single && $key ? false : [];
 		}
 
 		if ( ! $key ) {
